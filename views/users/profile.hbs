@@ -1,4 +1,4 @@
-<div class="card mb-3" style="width: 1200px; height: 25%;">
+<div class="card mb-3" style="width: 1300px; height: 25%;">
   <div class="row g-0">
     <div class="col-md-4">
       <img class="img-responsive center-block mb-5" src="{{user.image}}"
@@ -20,22 +20,103 @@
   </div>
 </div>
 
-<div class="card text-center" style="width: 1200px">
-  <div class="card-header">
-    {{#if user.Comments}} {{commentCounts user.Comments}} {{else}} 0 {{/if}}間已評論餐廳
+<div class="row mt-2">
+  <div class="col-md-4">
+
+    <div class="card mb-4">
+      <div class="card-header text-center">
+        {{#if user.Followings}} {{commentCounts user.Followings}} {{else}} No {{/if}} followings (追蹤者)
+      </div>
+      <div class="card-body d-flex justify-content-around flex-wrap">
+        {{#if user.Followings}}
+          {{#each user.Followings}}
+            <a href="/users/{{this.id}}" class="m-1">
+              {{#if this.image}}
+              <img src="{{this.image}}" width="140px" height="140px" style="transition: opacity 0.5s; opacity:0;"
+                onload="this.style.opacity=1;" />
+              {{else}}
+              <img src="https://via.placeholder.com/140" width="140px" height="140px" />
+              {{/if}}
+            </a>
+          {{/each}}
+        {{else}}
+        <p>
+        <h2>無追蹤者</h2>
+        </p>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header text-center">
+        {{#if user.Followers}} {{commentCounts user.Followers}} {{else}} No {{/if}} followers (追隨者)
+      </div>
+      <div class="card-body d-flex justify-content-around flex-wrap">
+        {{#if user.Followers}}
+        {{#each user.Followers}}
+        <a href="/users/{{this.id}}" class="m-1">
+          {{#if this.image}}
+          <img src="{{this.image}}" width="140px" height="140px" style="transition: opacity 0.5s; opacity:0;"
+            onload="this.style.opacity=1;" />
+          {{else}}
+          <img src="https://via.placeholder.com/140" width="140px" height="140px" />
+          {{/if}}
+        </a>
+        {{/each}}
+        {{else}}
+        <p>
+        <h2>無追隨者</h2>
+        </p>
+        {{/if}}
+      </div>
+    </div>
+
   </div>
-  <div class="card-body d-flex justify-content-around flex-wrap">
-    {{#if user.Comments}}
-    {{#each user.Comments}}
-    <a href="/restaurants/{{this.Restaurant.id}}">
-      <img class="center-block mb-5 me-2" src="{{this.Restaurant.image}}"
-        style="width: 250px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
-    </a>
-    {{/each}}
-    {{else}}
-    <p>
-    <h2>無評論餐廳</h2>
-    </p>
-    {{/if}}
+
+  <div class="col-md-8">
+
+    <div class="card mb-4">
+      <div class="card-header text-center">
+        {{#if comments}} {{commentCounts comments}} {{else}} 0 {{/if}}間已評論餐廳
+      </div>
+      <div class="card-body d-flex justify-content-around flex-wrap">
+        {{#if comments}}
+        {{#each comments}}
+        <a href="/restaurants/{{this.Restaurant.id}}">
+          <img class="center-block mb-5 me-2" src="{{this.Restaurant.image}}"
+            style="width: 250px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+        </a>
+        {{/each}}
+        {{else}}
+        <p>
+        <h2>無評論餐廳</h2>
+        </p>
+        {{/if}}
+      </div>
+    </div>
+
+
+    <div class="card mb-4">
+      <div class="card-header text-center">
+        {{#if user.FavoritedRestaurants}} {{commentCounts user.FavoritedRestaurants}} {{else}} 0 {{/if}}間已收藏的餐廳
+      </div>
+      <div class="card-body d-flex justify-content-around flex-wrap">
+        {{#if user.FavoritedRestaurants}}
+        {{#each user.FavoritedRestaurants}}
+        <a href="/restaurants/{{this.id}}">
+          <img class="center-block mb-5 me-2" src="{{this.image}}"
+            style="width: 250px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+        </a>
+        {{/each}}
+        {{else}}
+        <p>
+        <h2>無評論餐廳</h2>
+        </p>
+        {{/if}}
+      </div>
+    </div>
+
   </div>
+</div>
+
 </div>

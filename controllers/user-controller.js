@@ -44,15 +44,26 @@ const userController = {
     const userSession = req.user
     const userId = req.params.id
 
-    return User.findByPk(userId, {
-      include: [{ model: Comment, include: [Restaurant] }],
-      group: 'Comments->Restaurant.id'
-    })
-      .then(user => {
+    return Promise.all([
+      User.findByPk(userId, {
+        include: [
+          { model: Restaurant, as: 'FavoritedRestaurants' },
+          { model: User, as: 'Followers' },
+          { model: User, as: 'Followings' }
+        ]
+      }),
+      Comment.findAll({
+        include: [Restaurant],
+        where: { userId },
+        group: 'Restaurant.id',
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([user, comments]) => {
         if (!user) throw new Error('User do not exist')
-        user = user.toJSON()
 
-        res.render('users/profile', { user, userSession })
+        res.render('users/profile', { user: user.toJSON(), comments, userSession })
       })
       .catch(err => next(err))
   },
@@ -182,6 +193,10 @@ const userController = {
   },
   addFollowing: (req, res, next) => {
     const { userId } = req.params
+    const followerId = req.user.id
+    const followingId = req.params.id
+
+    if (followerId === Number(followingId)) throw new Error("You can't follow yourself")
 
     Promise.all([
       User.findByPk(userId),
